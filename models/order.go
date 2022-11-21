@@ -1,14 +1,12 @@
 package models
 
-import "time"
-
 type Order struct {
-	ID string `json:"id"`
-	UserId string `json:"user_id"`
+	ID int `json:"id"`
+	UsersId string `json:"users_id"`
 	Price float64 `json:"price"`
 	PaymentStatus bool `json:"payment_status"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 type OrderList struct {

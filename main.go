@@ -18,6 +18,7 @@ func main() {
     if err != nil {
         log.Fatalf("Error occurred: %s", err.Error())
     }
+
     dbUser, dbPassword, dbName :=
         os.Getenv("POSTGRES_USER"),
         os.Getenv("POSTGRES_PASSWORD"),
@@ -34,6 +35,7 @@ func main() {
     go func() {
         server.Serve(listener)
     }()
+
     defer Stop(server)
     log.Printf("Started server on %s", addr)
     ch := make(chan os.Signal, 1)
@@ -41,6 +43,7 @@ func main() {
     log.Println(fmt.Sprint(<-ch))
     log.Println("Stopping API server.")
 }
+
 func Stop(server *http.Server) {
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
     defer cancel()

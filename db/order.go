@@ -23,7 +23,7 @@ func (db Database) GetAllOrders() (*models.OrderList, error) {
     return orderList, nil
 }
 
-func (db Database) AddItem(order *models.Order) error {
+func (db Database) CreateOrder(order *models.Order) error {
     var id int
     var createdAt string
     query := "INSERT INTO orders (users_id, price) VALUES ($1, $2) RETURNING id, created_at"
@@ -37,7 +37,7 @@ func (db Database) AddItem(order *models.Order) error {
 
 }
 
-func (db Database) GetItemById(orderId int) (models.Order, error) {
+func (db Database) GetOrderById(orderId int) (models.Order, error) {
     var order models.Order
     query := "SELECT * FROM orders WHERE id = $1"
     row := db.Conn.QueryRow(query, orderId)
@@ -49,7 +49,7 @@ func (db Database) GetItemById(orderId int) (models.Order, error) {
     }
 }
 
-func (db Database) DeleteItem(orderId int) error {
+func (db Database) DeleteOrder(orderId int) error {
     query := "DELETE FROM orders WHERE id = $1"
     _, err := db.Conn.Exec(query, orderId)
     switch err {
@@ -60,7 +60,7 @@ func (db Database) DeleteItem(orderId int) error {
     }
 }
 
-func (db Database) UpdateItem(itemId int, orderData models.Order) (models.Order, error) {
+func (db Database) UpdateOrder(itemId int, orderData models.Order) (models.Order, error) {
     order := models.Order{}
     query := "UPDATE orders SET users_id = $1, price = $2, payment_status = $3, updated_at = NOW() WHERE id = $4 RETURNING id, updated_at"
     err := db.Conn.QueryRow(query, orderData.UsersId, orderData.Price, orderData.PaymentStatus, orderData.UpdatedAt).Scan(&order.ID, &order.UpdatedAt)

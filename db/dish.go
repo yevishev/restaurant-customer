@@ -18,3 +18,13 @@ func (db Database) GetAllDishes() (*models.DishList, error) {
 	}
 	return dishList, nil
 }
+
+func (db Database) CreateDish(dish *models.Dish) error {
+	var id int
+	query := "INSERT INTO dishes (name, price) VALUES ($1, $2) RETURNING id"
+	err := db.Conn.QueryRow(query, &dish.Name, &dish.Price).Scan(&id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

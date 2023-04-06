@@ -1,16 +1,18 @@
 package main
+
 import (
-    "context"
-    "fmt"
-    "github.com/yevishev/restaurant-customer/db"
-    "github.com/yevishev/restaurant-customer/handler"
-    "log"
-    "net"
-    "net/http"
-    "os"
-    "os/signal"
-    "syscall"
-    "time"
+	"context"
+	"fmt"
+	"log"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/yevishev/restaurant-customer/db"
+	"github.com/yevishev/restaurant-customer/handler"
 )
 func main() {
     addr := ":8080"
@@ -31,9 +33,9 @@ func main() {
     }
     //при завершении сервера закрыть подключение к бд
     defer database.Conn.Close()
-    //в структуру Server записывается набор хендлеров
+    //в структуру Server записывается slice хендлеров
     server := &http.Server{
-        Handler: http.HandlerFunc(handler.Serve),
+        Handler: handler.CreateMux(),
     }
     //для каждого хендлера создается горутина
     go func() {

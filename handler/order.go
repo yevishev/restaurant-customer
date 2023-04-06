@@ -2,45 +2,50 @@ package handler
 
 import (
 	"fmt"
+	"io"
 	"net/http"
-	"strconv"
+
 )
+func CreateMuxOrder() *http.ServeMux {
+	mux := http.NewServeMux()
 
-var OrderRoutes = []Route{
-	NewRoute("GET", "/orders", getAllOrders),
-	NewRoute("POST", "/order", createOrder),
-	NewRoute("GET", "/order/([^/]+)", order),
-	NewRoute("POST", "/order/([^/]+)", updateOrder),
-	NewRoute("GET", "/order/([^/]+)/delete", deleteOrder),
+    // Регистрируем обработчики для маршрутов в этом модуле
+    mux.HandleFunc("/orders", getAllOrders)
+    mux.HandleFunc("/order", createOrder)
+    mux.HandleFunc("/order/([^/]+)", order)
+    mux.HandleFunc("/order", updateOrder)
+    mux.HandleFunc("/order/([^/]+)/delete", deleteOrder)
+	
+	return mux
 }
-
 //GetAllOrders
 func getAllOrders(writer http.ResponseWriter, request *http.Request) {
-	fmt.Fprint(writer, "apiGetWidgets\n")
+    resp, err := http.Get("https://google.com/")
+    if err != nil {
+        // handle error
+    }
+    defer resp.Body.Close()
+    body, err := io.ReadAll(resp.Body)
+	fmt.Fprint(writer, string(body))
 }
 
 //CreateOrder
 func createOrder(writer http.ResponseWriter, request *http.Request) {
-	slug := GetField(request, 0)
-	fmt.Fprintf(writer, "createOrder %s\n", slug)
+    fmt.Fprintf(writer, "apiUpdateWidgetPart %s %d\n", "slug", "id")
 }
 
 //GetOrderById
 func order(writer http.ResponseWriter, request *http.Request) {
-	id := GetField(request, 0)
-	fmt.Fprintf(writer, "order %s\n", id)
+	fmt.Fprintf(writer, "order %s\n", "id")
 }
 
 //DeleteOrder
 func deleteOrder(writer http.ResponseWriter, request *http.Request) {
-	slug := GetField(request, 0)
-	id, _ := strconv.Atoi(GetField(request, 1))
-	fmt.Fprintf(writer, "deleteOrder %s %d\n", slug, id)
+	fmt.Fprintf(writer, "deleteOrder %s %d\n", "slug", "id")
+
 }
 
 //UpdateOrder
 func updateOrder(writer http.ResponseWriter, request *http.Request) {
-	slug := GetField(request, 0)
-	id, _ := strconv.Atoi(GetField(request, 1))
-	fmt.Fprintf(writer, "updateOrder %s %d\n", slug, id)
+	fmt.Fprintf(writer, "updateOrder %s %d\n", "slug", "id")
 }

@@ -5,11 +5,15 @@ import (
 	"net/http"
 )
 
-var DishRoutes = []Route{
-	NewRoute("GET", "/dishes", getAllDishes),
-	NewRoute("POST", "/dish", createDish),
-}
+func CreateMuxDish() *http.ServeMux {
+	mux := http.NewServeMux()
 
+    // Регистрируем обработчики для маршрутов в этом модуле
+    mux.HandleFunc("/dishes", getAllDishes)
+    mux.HandleFunc("/dish", createDish)
+
+	return mux
+}
 //GetAllOrders
 func getAllDishes(writer http.ResponseWriter, request *http.Request) {
 	fmt.Fprint(writer, "getAllDishes\n")
@@ -17,7 +21,6 @@ func getAllDishes(writer http.ResponseWriter, request *http.Request) {
 
 //CreateOrder
 func createDish(writer http.ResponseWriter, request *http.Request) {
-	slug := GetField(request, 0)
-	fmt.Fprintf(writer, "createDish %s\n", slug)
+	fmt.Fprintf(writer, "createDish %s\n", "slug")
 }
 
